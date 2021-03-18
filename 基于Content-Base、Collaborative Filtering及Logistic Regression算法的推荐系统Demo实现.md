@@ -18,15 +18,15 @@ d. 之后对相似的100首歌曲根据逻辑回归算法进行降序排序，�
 
 ## CB算法推荐
 
-在CB算法计算两两歌曲之间的相似度算法中，首先得到工#条ItemA-ItemB-Score数据；之后将数据整合，得到与ItemA相似的歌曲列表，共#条这样的歌曲列表（每个Item对应一个列表）。这里的Item指的是歌曲，Score代表相似度，后续不再赘述。
+在CB算法计算两两歌曲之间的相似度算法中，首先得到共135239532条ItemA-ItemB-Score数据；之后将数据整合，得到与ItemA相似的歌曲列表，共45940条这样的歌曲列表（每个Item对应一个列表）。这里的Item指的是歌曲，Score代表相似度，后续不再赘述。
 
 ## CF算法推荐
 
-同样，在CF算法计算两两歌曲之间的相似度算法中，首先得到工#条ItemA-ItemB-Score数据；之后将数据整合，得到与ItemA相似的歌曲列表，共#条这样的歌曲列表（每个Item对应一个列表）。
+同样，在CF算法计算两两歌曲之间的相似度算法中，首先得到共2568542条ItemA-ItemB-Score数据；之后将数据整合，得到与ItemA相似的歌曲列表，共39963条这样的歌曲列表（每个Item对应一个列表）。
 
 ## LR算法精排
 
-在LR算法中，首先构建模型，得到用户对歌曲的喜好模型（参数W和B），共#个模型特征，因此得到#个W参数，以及一个B参数
+在LR算法中，首先构建模型，得到用户对歌曲的喜好模型（参数W和B），共29331个模型特征，因此得到29331个W参数，以及一个B参数
 
 ## 模拟Demo实现
 
@@ -37,7 +37,7 @@ d. 之后对相似的100首歌曲根据逻辑回归算法进行降序排序，�
 
 # 2.项目概述
 
-![image-20210313062344028](C:\Users\DELL\AppData\Roaming\Typora\typora-user-images\image-20210313062344028.png)
+![image-20210318110915888](F:\mygit\recommender\基于Content-Base、Collaborative Filtering及Logistic Regression算法的推荐系统Demo实现.assets\image-20210318110915888.png)
 
 ## 算法应用原理
 
@@ -57,7 +57,7 @@ d. 之后对相似的100首歌曲根据逻辑回归算法进行降序排序，�
 
 在本项目中，我们应用CB算法第一步，得到(ItemID, substring1:value, substring2:value…)类似结构的数据；之后进行所有数据的整合，得到[(Itemi, substringk, value), (Itemo ,substringp, value)…]的数据结构；对于具有同一个substring的ItemID，认为这些ItemID具有相似性，因此下一步计算ItemA与ItemB的相似度，从而得到类似[(ItemA, ItemB, Score)…]的数据结构；而对于每个ItemA，可以看到有多个与之相似的ItemB，从而我们容易与ItemA相似的Item列表。
 
-（此处放图）
+![image-20210318111009171](F:\mygit\recommender\基于Content-Base、Collaborative Filtering及Logistic Regression算法的推荐系统Demo实现.assets\image-20210318111009171.png)
 
 对于CF算法（Collaborative Filterin，协同过滤算法）而言，我们存在两种形式。一种是基于用户的协同过滤算法，另一种是基于物品的协同过滤算法。
 
@@ -73,11 +73,21 @@ d. 之后对相似的100首歌曲根据逻辑回归算法进行降序排序，�
 
 第一步，计算用户相似度。这里需要用到用户的打分向量进行相似度计算。相似度的度量可以是余弦相似度或者皮尔逊相关系数；
 
-（此处放公式）
+1， 余弦相似度：
+
+​              														![image-20210318111612292](F:\mygit\recommender\基于Content-Base、Collaborative Filtering及Logistic Regression算法的推荐系统Demo实现.assets\image-20210318111612292.png)
+
+2， 皮尔逊相关系数：
+
+![image-20210318111541070](F:\mygit\recommender\基于Content-Base、Collaborative Filtering及Logistic Regression算法的推荐系统Demo实现.assets\image-20210318111541070.png)
+
+​                       
 
 第二步：根据第一步计算而得的用户相似度进行降序排序，得到前TopN个高相关用户集合，找到这些用户喜欢但是目标用户还不知道的物品，进行推荐度计算。
 
-（此处放公式）
+物品推荐度公式：
+
+​																![image-20210318111625940](F:\mygit\recommender\基于Content-Base、Collaborative Filtering及Logistic Regression算法的推荐系统Demo实现.assets\image-20210318111625940.png)
 
 这条公式的含义是：目标用户的历史评分均值+相似用户对该物品的评分与此用户的历史评分均值的差值进行相似度加权平均。其中，![img](file:///C:/Users/DELL/AppData/Local/Temp/msohtmlclip1/01/clip_image002.png)表示用户i（即目标用户）对目标物品j的评分，k表示相似用户的序数，![img](file:///C:/Users/DELL/AppData/Local/Temp/msohtmlclip1/01/clip_image004.png)表示用户i与用户k的相似度，![img](file:///C:/Users/DELL/AppData/Local/Temp/msohtmlclip1/01/clip_image006.png)表示相似用户对目标物品的评分。
 
@@ -89,7 +99,7 @@ d. 之后对相似的100首歌曲根据逻辑回归算法进行降序排序，�
 
 物品推荐度公式：
 
-（此处放公式）
+​																![image-20210318111723286](F:\mygit\recommender\基于Content-Base、Collaborative Filtering及Logistic Regression算法的推荐系统Demo实现.assets\image-20210318111723286.png)
 
 这条公式的含义是：目标物品的历史评分均值+目标用户对相似物品的评分与此物品的历史评分均值的差值进行相似度加权平均。其中，![img](file:///C:/Users/DELL/AppData/Local/Temp/msohtmlclip1/01/clip_image002.png)表示用户i（即目标用户）对目标物品j的评分，k表示相似物品的序数，![img](file:///C:/Users/DELL/AppData/Local/Temp/msohtmlclip1/01/clip_image004.png)表示物品i与物品k的相似度，![img](file:///C:/Users/DELL/AppData/Local/Temp/msohtmlclip1/01/clip_image006.png)表示目标用户对相似物品的评分。
 
@@ -147,9 +157,9 @@ d. 之后对相似的100首歌曲根据逻辑回归算法进行降序排序，�
 
 **cb_train.data**
 
-| Token | Itemid | score |
-| ----- | ------ | ----- |
-|       |        |       |
+|   Token    |  Itemid   | score |
+| :--------: | :-------: | :---: |
+| 例子：爱情 | 429759835 |  11   |
 
 数据表中，score表示itemid的各个token在该Item中的重要程度。
 
